@@ -1,0 +1,173 @@
+\newcommand{\authorone}{Jordan Lack}
+\newcommand{\authortwo}{Matthew J. Powell}
+\newcommand{\authorthree}{Aaron D. Ames}
+
+\newcommand{\ds}{\mathrm{oa}}
+\newcommand{\oa}{\mathrm{oa}}
+\newcommand{\fa}{\mathrm{fa}}
+\newcommand{\ua}{\mathrm{ua}}
+
+\newcommand{\Vfa}{V_{\mathrm{FA}}}
+\newcommand{\Vua}{V_{\mathrm{UA}}}
+\newcommand{\Voa}{V_{\mathrm{OA}}}
+
+\newcommand{\ts}{e_{\mathrm{ts}}}
+\newcommand{\hl}{e_{\mathrm{hl}}}
+\newcommand{\hs}{e_{\mathrm{hs}}}
+
+\newcommand{\cwf}{\mathrm{cwf}}
+\newcommand{\ecwf}{\mathrm{ecwf}}
+
+%%% Robot
+\newcommand{\robot}{r}
+\newcommand{\lengthofcalf}{L_c}
+\newcommand{\lengthofthigh}{L_t}
+
+%%% dimensionality
+\newcommand{\dimensionu}{m}
+\newcommand{\dimensionx}{n}
+\newcommand{\dimensioncontacts}{k}
+
+%%% General Math Notation
+% Common Number Sets
+\newcommand{\Reals}{\mathbb{R}}
+\newcommand{\Integers}{\mathbb{Z}}
+\newcommand{\Naturals}{\mathbb{N}}
+
+% Zero vector
+\newcommand{\zm}{\mathbf{0}}
+
+%%% General Physics Notation
+\newcommand{\frictioncoefficient}{\mu}
+
+%%% Hybrid Systems
+% Graphs and Cycles
+\newcommand{\cycle}{\ell}
+\newcommand{\Graph}{\Gamma}
+\newcommand{\vertex}{v}
+\newcommand{\VertexSet}{V}
+\newcommand{\edge}{e}
+\newcommand{\EdgeSet}{E}
+\newcommand{\sore}{\text{sor($\edge$)}}
+\newcommand{\tare}{\text{tar($\edge$)}}
+
+% Hybrid Control Systems
+\newcommand{\HC}{\mathscr{HC}}
+\newcommand{\domain}{D}
+\newcommand{\admissiblecontrol}{U}
+\newcommand{\guard}{S}
+\newcommand{\resetmap}{\Delta}
+\newcommand{\controlsystem}{FG}
+
+% Indexing
+\newcommand{\indexbyvertex}[1]{#1_\vertex}
+\newcommand{\indexbyedge}[1]{#1_\edge}
+\newcommand{\indexbysource}[1]{#1_{\sore}}
+\newcommand{\indexbytarget}[1]{#1_{\tare}}
+\newcommand{\indexbycontact}[1]{#1_{\contact}}
+\newcommand{\indexbyhuman}[1]{#1^\human}
+\newcommand{\indexbyrobot}[1]{#1_\robot}
+\newcommand{\indexbyfullactuation}[1]{#1_{\fullactuation}}
+\newcommand{\indexbyunderactuation}[1]{#1_{\underactuation}}
+\newcommand{\indexbydoublesupport}[1]{#1_{\doublesupport}}
+
+% Robot
+\newcommand{\x}{x}
+\newcommand{\xdot}{\dot \x}
+\newcommand{\control}{u}
+
+
+\newcommand{\Lagrangian}{L}
+\newcommand{\KineticEnergy}{T}
+\newcommand{\PotentialEnergy}{V}
+
+\newcommand{\GeneralizedInertia}{M(\q)}
+\newcommand{\CoriolisGravity}{N(\q,\dq)}
+\newcommand{\Coriolis}{C(\q,\dq) \dq}
+\newcommand{\Gravity}{G(\q)}
+\newcommand{\TorqueDistribution}{B(\q)}
+\newcommand{\Jacobian}{J}
+\newcommand{\ContactWrench}{F}
+
+\newcommand{\q}{q}
+\newcommand{\dq}{\dot \q}
+\newcommand{\ddq}{\ddot \q}
+\newcommand{\ConfigurationSpace}{Q}
+
+\newcommand{\qsa}{\q_{sa}}
+\newcommand{\qsk}{\q_{sk}}
+\newcommand{\qsh}{\q_{sh}}
+\newcommand{\qnsh}{\q_{nsh}}
+\newcommand{\qnsk}{\q_{nsk}}
+\newcommand{\qnsa}{\q_{nsa}}
+
+% Contacts and Constraints
+\newcommand{\Terrain}{\mathcal{T}}
+\newcommand{\contact}{c}
+\newcommand{\ContactSet}{\mathcal{C}}
+\newcommand{\holonomic}{\eta}
+\newcommand{\unilateral}{h}
+\newcommand{\ConstraintMatrix}{A}
+
+% Domain Breakdowns
+\newcommand{\DomainBreakdown}{\mathcal{B}}
+
+% Human-Inspired Control
+\newcommand{\pzero}{d_{\vertex}}
+\newcommand{\fullactuation}{fa}
+\newcommand{\underactuation}{ua}
+\newcommand{\doublesupport}{oa}
+\newcommand{\controlgain}{\varepsilon}
+\newcommand{\param}{\alpha}
+\newcommand{\humanoutputcombo}{Y_{\vertex}}
+\newcommand{\OutputSet}{O}
+\newcommand{\youtput}{o}
+\newcommand{\controloutput}{y}
+\newcommand{\human}{H}
+%\newcommand{\vhip}{v_{hip,v}}
+\newcommand{\vhip}{\mathrm{vel}_v}
+\newcommand{\phip}{p_{hip,v}}
+\newcommand{\phipL}{\delta p_{hip,v}}
+\newcommand{\timeparameterization}{\tau}
+\newcommand{\yone}{\controloutput_{1,\vertex}}
+\newcommand{\yonefa}{\controloutput_{1,\fullactuation}}
+\newcommand{\yoneua}{\controloutput_{1,\underactuation}}
+\newcommand{\yoneds}{\controloutput_{1,\doublesupport}}
+\newcommand{\yaone}{\controloutput^a_{1,\vertex}}
+\newcommand{\yatwo}{\controloutput^a_{2,\vertex}}
+\newcommand{\ydone}{\controloutput^d_{1,\vertex}}
+\newcommand{\ydtwo}{\controloutput^d_{2,\vertex}}
+\newcommand{\ytwo}{\controloutput_{2,\vertex}}
+\newcommand{\ydottwo}{{\dot \controloutput}_{2,\vertex}}
+\newcommand{\ytwofa}{\controloutput_{2,\fullactuation}}
+\newcommand{\ytwoua}{\controloutput_{2,\underactuation}}
+\newcommand{\ytwods}{\controloutput_{2,\doublesupport}}
+\newcommand{\dyonedq}{c}
+\newcommand{\dytwodq}{H}
+
+%IO Linearization
+\newcommand{\decouplingmatrix}{\mathcal{A}}
+
+%%% Zero Dynamics and Partial
+\newcommand{\ZeroDynamics}{\mathbf{Z}}
+\newcommand{\PartialZeroDynamics}{\mathbf{PZ}}
+% Motion Transitions
+\newcommand{\paramtransition}{\gamma}
+% Reconstruction
+\newcommand{\qreconstruction}{\Phi}
+\newcommand{\dqreconstruction}{\Psi}
+% Inverse Kinematics
+\newcommand{\thetaalpha}{\vartheta(\indexbydoublesupport{\param})}
+\newcommand{\thetaalphadot}{{\dot \vartheta}(\indexbydoublesupport{\param})}
+
+%%% Optimization
+\newcommand{\HDBC}{\mathrm{Cost}_{\mathrm{HD}}}
+\newcommand{\costoa}{\mathrm{Cost}_{\mathrm{oa}}}
+\newcommand{\costfa}{\mathrm{Cost}_{\mathrm{fa}}}
+\newcommand{\costua}{\mathrm{Cost}_{\mathrm{ua}}}
+\newcommand{\st}{\quad \mathrm{s.t} \quad}
+
+%%% Formatting
+\newcommand{\takespace}{\vspace{-5mm}}
+\newcommand{\gap}{\vspace{0.1cm}}
+\newcommand{\newsec}[1]{\gap \noindent {\bf #1}}

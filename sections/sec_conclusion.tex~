@@ -1,0 +1,3 @@
+\section{Conclusion}
+
+The objective of this paper has been to present a novel method with which to design multi-domain walking gaits. It began with the introduction of multi-domain hybrid systems followed by the introduction of the floating base model. The principle contribution lies, however, in the multi-domain human inspired optimization. Using the human inspired optimization, walking gaits can be designed and shaped by altering constraints. The human-like walking presented here was achieved using I/O Linearization, but with the use of a QP a single control law to be used for domains with differing degrees of actuation. The methods described here have been recently realized on AMBER2 to achieve robust, multi-domain locomotion \cite{url:AMBER2_MultiContact}.

@@ -1,0 +1,59 @@
+\section{INTRODUCTION}
+
+For as long as the field of robotics has existed, which has not been very long relative to other areas of engineering,
+it has been a goal to make robots that look and behave like humans. Great strides have been made in the area of
+robotics that have produced arms capable of all the motions of humans and with comparable strength. Similar advances
+have been made with robotic hands. Hands such as the Sandia Hand \cite{url:Sandia_National_Labs} possess
+incredible dexterity. Unfortunately, advancements in robotic walking have been much slower than much of
+the rest of robotics; however, this is not due to a lack of effort. Bipedal robots have been walking for quite some time actually. Initially it
+was shown that dynamic walking can be obtained without the use of control at all \cite{McGeer90a,CRTW05}.
+The fact that passive approaches could be used to obtain walking points to the fact that there is a great amount
+of energy stored in dynamic walking, and if harnessed correctly and paired with good control, dynamic walking can
+be achieved with minimal input.
+
+In addition to over actuation, there are phases of both full actuation and under actuation in human gaits. While full actuation is seen
+everywhere in controls, under actuation is similar to over actuation in that it is not as common. Under actuation is,
+however, an inherent phase of human walking and has been studied in the context of bipedal walking for some time. Under
+actuation has been studied in great detail in point footed walking in \cite{GCS09,SGC07,WGCCM07,Ames12} to name just a few.
+
+The vast majority of approaches for achieving bipedal robotic locomotion
+are centered around controlling the Zero Moment Point(ZMP) \cite{FAA10,KKKFHYH06,TIOMA05}. Though ZMP walking has proven
+successful on many robots, requiring the feet to be flat is extremely restrictive for walking gaits. In contrast, humanlike
+walking consists of multiple domains consisting of both single and double support. There is a great collection of works that have studied the different domains of walking
+as they pertain to bipedal locomotion \cite{SPSA11,SA09a}; however, all of the phases have yet to be put together collectively and
+in a formal manner.
+
+Bipedal walking robots are notorious for requiring large actuator torques at relatively low velocities. In many fields of robotics, this
+can simply be remedied by the addition of increasingly larger actuators to compensate; however, due to the large number of
+degrees of freedom coupled with the desire to design to anthropomorphic proportions, it is more critical than ever that
+controllers be designed that are capable of producing behaviors that require as little torque as possible. This
+can be done by producing walking behaviors that are highly dynamic and can make use of the passive
+dynamics as humans do in order to reduce actuator requirements. It is also important for
+robotics researchers to develop novel control algorithms capable of factoring in actuator requirements in
+real time. This is important because regardless of how a behavior is designed, the behavior of the
+controller outside of the designed region of operation is equally as vital since external disturbances
+are inevitable.
+\begin{figure}[!]
+\centering
+\includegraphics[width=80mm]{figures/AMBER2ROBOTS.pdf}
+\caption{Pictures of the bipedal robotic testbed Amber 2.0.}
+\label{fig:robots}
+\end{figure}
+
+This paper will first present an approach for achieving multidomain planar bipedal walking consisting of both
+single and double support phases with the goal being to eventually realize the results presented on Amber 2.0. Amber
+2.0 is a bipedal robot designed and built in AMBER Lab. A picture of Amber 2.0 as well as a SolidWorks model are
+shown in \ref{fig:robots}. There are many works on planar bipedal walking both with feet \cite{CDG08}
+and without feet \cite{SPPG10,YPA12} and performing behaviors from walking \cite{GCS2007} to running \cite{ZYA2012},
+yet there has been virtually no works that have attempted to understand the multicontact phases of walking which
+are a significant portion of the human gait. Furthurmore, a novel control approach for reducing actuator torques
+via an online optimization will be shown to drastically reduce actuator requirements as well as remedy the
+control issues inherent to double support.
+
+The remainder of the paper will be structured as follows. Sect. II. will introduce the unpinned approach
+used to model the bipedal robot as well as discuss the role external forcing. In Sect. III, we will
+discuss the generalized control algorithm used to achieve multiphase walking before discussing the multidomain hybrid
+system model in Sect. IV. Sections V and VI will discuss the human inspired aspect of our control approach by
+discussing the human inspired output functions and a corresponding optimization for automatically generating
+parameters that fully define our controllers. We will then present simulation results comparing the performance
+of both controllers. 

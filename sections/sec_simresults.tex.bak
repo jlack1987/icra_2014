@@ -1,0 +1,91 @@
+\section{Simulation Results}
+The results discussed here are the result of a single optimization run with the robot parameters being that of
+Amber 2.0, a robot designed and built in AMBER Lab. The mass and length parameters are shown in Table \ref{table:params} where
+the mass and length notation is as defined in Fig. \ref{fig:robotparams}.
+\begin{table}[ht]
+\caption{AMBER 2.0 Mass \& Length Parameters}
+\centering
+\begin{tabular}{c c c c}
+\hline\hline
+Link & Mass(g) & Length(mm) & Width(mm) \\ [0.5ex]
+\hline
+Foot & 204.42 & 177.8 & 47.63 \\
+Calf & 1119.43 & 343.13 & 50.8 \\
+Thigh & 1172.57 & 298.45 & 50.8 \\
+Torso & 2154.79 & 104.01 & 285.75 \\ [1ex]
+\hline
+\end{tabular}
+\label{table:params}
+\end{table}
+\begin{figure}
+\centering
+\includegraphics[scale=.33]{figures/RobotConfig.pdf}
+\caption{Notation and and layout of model parameters.}
+\label{fig:robotparams}
+\end{figure}
+Tiles showing multiple frames of the robot as it moves through three steps are shown in Fig. \ref{fig:tiles}.
+\begin{figure}[t]
+\centering
+\includegraphics[width=80mm,height=60mm]{figures/Tiles.pdf}
+\caption{Walking gait tiles.}
+\label{fig:tiles}
+\end{figure}
+Fig. \ref{fig:Outputs} shows the actual and desired outputs over one step for I/O Linearization alone(Top Left and Top Right) as well as
+Control Lyapunov Functions(Bottom Left and Bottom Right). The figure shows how both methods yield almost exactly the same result.
+The main difference lies in the walking speed. Using Control Lyapunov Functions, the hip velocity does not quite
+converge back to the desired value; however, this simply results in a slightly slower walking speed.
+\begin{figure}[t]
+\centering
+\begin{subfigure}{0.3\textwidth}
+\hspace{-25mm}
+\includegraphics[width=70mm,height=50mm]{figures/TORK_IO.pdf}
+\label{IOTORQUE}
+\end{subfigure}
+\begin{subfigure}{0.3\textwidth}
+\vspace{5mm}
+\hspace{-2mm}
+\includegraphics[width=70mm,height=50mm]{figures/TORK_CLF.pdf}
+\label{CLFTORQUE}
+\end{subfigure}
+\caption{Torque profiles for 1-step using I/O Linearization(Left) and Control Lyapunov Functions(Right). Note that for the double support phase in the
+ figure on the right, a torque bound of 10Nm was enforced. This is evident by the way the torque flat lines at 10Nm.}
+\label{fig:Torque}
+\end{figure}
+Fig. \ref{fig:Torque} shows the joint torques for both I/O Linearization(Left) and CLF(Right). The joint torques for I/O Linearization alone
+are \emph{extremely high}, especially for the double support phase in which one would
+suspect the torques to be minimal based on the fact that both feet are on the ground and the robot is in a stable configuration.
+The torques for the two single support domains are high as well considering the motors in AMBER2 can output approximately 30-40
+Nm, making the ~150 Nm torques required 5 times the amount the robot can actually supply. Possibly an even worse result from I/O Linearization
+ alone is the fact that for an n-DOF configuration, only n-torques can be specified regardless of the number of actuators
+on the robot. This makes experimental implementation of torque control via simple I/O Linearization impossible for overactuated phases of bipedal walking.
+The plot of the torques over one step for the \emph{same walking gait} using the quadratic program are shown
+in Fig. \ref{fig:Torque} on the right.
+\begin{figure}[t]
+\centering
+\begin{subfigure}{0.3\textwidth}
+\hspace{-10mm}
+\includegraphics[width=60mm,height=40mm]{figures/YaVsYd1.pdf}
+\end{subfigure}
+\begin{subfigure}{0.3\textwidth}
+\vspace{4mm}
+\includegraphics[width=60mm,height=40mm]{figures/YaVsYd2.pdf}
+\label{ss_out}
+\end{subfigure}\\
+\begin{subfigure}{0.3\textwidth}
+\hspace{-10mm}
+\includegraphics[width=60mm,height=40mm]{figures/YaVsYd1_CLF.pdf}
+\end{subfigure}
+\begin{subfigure}{0.3\textwidth}
+\vspace{4mm}
+\includegraphics[width=60mm,height=40mm]{figures/YaVsYd2_CLF.pdf}
+\label{ss_out}
+\end{subfigure}
+\caption{Actual and desired outputs over one step using I/O Linearization(Top Left and Top Right) and Control Lyapunov Functions
+with the quadratic program(Bottom Left and Bottom Right).}
+\label{fig:Outputs}
+\end{figure}
+With a maximum torque of ~150 Nm with I/O Linearization and ~15 Nm with CLF/QP, the improvement in controller
+performance becomes abundantly clear. In addition to torque reduction, we are able to specify torques for
+all 6 actuators.
+
+

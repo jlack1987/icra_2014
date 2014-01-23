@@ -1,0 +1,87 @@
+\section{Simulation Results}
+
+
+This chapter presents a simulation example showing how the optimization algorithm of Chapter \ref{ch:optimization} was used to produce a multi-domain walking gait for the planar biped Amber 2. Amber 2 is a planar bipedal robotic testbed that was designed and partially machined within AMBER lab at Texas A\&M University. Amber 2 is a seven link robot supported by a light weight, carbon fiber boom that restricts motion to the saggital plane. The boom is counter weighted so as to not introduce anymore mass to the robot; however, there is an inertial load introduced to the torso link that is negligable due to the low friction bearings used in the construction of the boom as well as a long moment arm (approx. 8ft) separating the robot from the center of rotation of the boom.
+
+The mass and length parameters of Amber 2 are shown in Table \ref{table:params} with variable conventions as defined in Figure \ref{fig:robotparams}. 
+\begin{figure}[t]
+\centering
+\includegraphics[scale=.5]{figures/RobotConfig.pdf}
+\caption{Notation and and layout of the robot model parameters.}
+\label{fig:robotparams}
+\end{figure}
+The optimization algorithm of Chapter \ref{ch:optimization} was implemented using MATLAB'S FMINCON command.  In the underactuated phase, the integration algorithm ode45
+was used to integrate the dynamics forward in time.  In both the double support and fully actuated phases, the solution at each timestep was found in closed-form using the reconstruction algorithm discussed in Section \ref{sec:Reconstruction}.
+\begin{figure}
+\centering
+\includegraphics[scale=0.26]{figures/Tiles.pdf}
+\caption{Gait tiles for 3 domain walking gait.}
+\label{fig:Tiles}
+\end{figure} 
+\begin{table}[]
+\caption{AMBER 2.0 Mass \& Length Parameters}
+\centering
+\begin{tabular}{c c c c}
+\hline\hline
+Link & Mass(g) & Length(mm) & Width(mm) \\ [0.5ex]
+\hline
+Foot & 204.42 & 177.8 & 47.63 \\
+Calf & 1119.43 & 343.13 & 50.8 \\
+Thigh & 1172.57 & 298.45 & 50.8 \\
+Torso & 2154.79 & 104.01 & 285.75 \\ [1ex]
+\hline
+\end{tabular}
+\label{table:params}
+\end{table}
+The results of the optimization are shown in Figure \ref{fig:Tiles}, where the 3-domain walking gait is plotted as a series of tiles. 
+An animation is available at [\url{http://www.youtube.com/watch?v=OY-QsaIglQY}].  The gait shown here has an average velocity of 0.42 m/s, with a step length
+of 0.373 m (58 pct of leg length) and a period of $T = 0.88$ sec. The step time can be further broken down, with 0.139 s (16 pct) in double 
+support / overactuation, 0.19 s (21 pct) in full actuation, and 0.56 s (63 pct) in underaction.
+The initial condition for the gait on the guard of the under actuated domain,i.e. $ x_{0} = (q_{0},\dot{q}_{0})^{T} \in S_{ua\rightarrow oa}$, expressed in the form $(q_{0},\dot{q}_{0})^{T} = \{p_{x},p_{y},\varphi_{0},q_{r},\dot{p}_{x},\dot{p}_{y},\dot{\varphi}_{0},\dot{q}_{r}\}^{T}$, is
+\begin{align}
+& q_{0} = (0, 0, -0.162, -0.298, 0.303, 0.073, -0.546, 0.469, -0.366)^{T} \\
+& \dot{q}_{0} = (0, 0, -0.628, -0.069, 0.036, 0.661, -0.262, -4.985, -2.246)^{T}
+\end{align}
+The actual and desired outputs for the gait are shown in Figure \ref{fig:Outputs}. Recall from that the hip velocity is not invariant through impact and thus the actual hip velocity is not equal to the desired hip velocity at the beginning of the step. Also note the discrete jump in the velocity of the hip is due to the impact at toe strike. Shown in Figure \ref{fig:subplot_orbit} on the left is a phase plot of the 3-domain walking over 9 steps displaying the periodic nature of the walking. Also in Figure \ref{fig:subplot_orbit} are plots of the joint angles and joint velocities in the top right and bottom right, respectively.
+
+As stated in Chapter \ref{ch:optimization}, I/O Linearization is used to design the multi-domain walking gaits. Recall the limitations with I/O Linearization and over actuation discussed in Section \ref{subsec:OAFAControl}. With the over actuated domain here consisting of 5 degrees of freedom, a torque cannot be specified for the nonstance ankle. 
+This can be seen in Figure \ref{fig:Torques} on the left in which the joint torques are shown over the course of a single step using simple I/O Linearization. The figure on the right is also the torques over a single step using the quadratic program from Chapter \ref{ch:QP} that is able to specify a torque at all six actuators to track the outputs. It is also important to note that the torque across domain transitions is not continuous. For experimental implementation, however, low pass filters would be applied to the commanded torques which would smooth out the discontinuities.
+% \begin{figure}[t!]
+% \centering
+% \begin{subfigure}{0.45\textwidth}
+% \hspace{-5mm}
+% \includegraphics[scale=0.61]{figures/YaVsYd1-crop.pdf}
+% \end{subfigure}
+% \begin{subfigure}{0.45\textwidth}
+% \vspace{1mm}
+% \includegraphics[scale=0.6]{figures/YaVsYd2-crop.pdf}
+% \end{subfigure}\\
+% \caption{Actual and desired outputs over one step for a 3 domain walking gait.}
+% \label{fig:Outputs}
+% \end{figure}
+% 
+% \begin{figure}[t!]
+% \centering
+% \includegraphics[scale=0.5]{figures/subplot_orbit-crop.pdf}
+% \hspace{-10mm}
+% \caption[Phase plot and plots of joint positions and joint velocities over time]{On the left is a phase plot for 9 steps of a 3 domain walking gait which shows the periodicity of the gait. The joint angles and velocities are shown in the plots in the top right and bottom right, respectively.}
+% \label{fig:subplot_orbit}
+% \end{figure}
+% 
+% \begin{figure}
+% \centering
+% \begin{subfigure}{0.45\textwidth}
+% \hspace{-10mm}
+% \includegraphics[scale=0.61]{figures/TORK_IO-crop.pdf}
+% \end{subfigure}
+% \begin{subfigure}{0.45\textwidth}
+% \vspace{0mm}
+% \includegraphics[scale=0.6]{figures/TORK_QP-crop.pdf}
+% \end{subfigure}\\
+% \caption[Plots comparing joint torques from I/O Linearization and the QP.]{Joint torques over one step using I/O Linearization(left) and the quadratic program(right).}
+% \label{fig:Torques}
+% \vspace{15cm}
+% \end{figure}
+
+\vspace{-10mm}
+

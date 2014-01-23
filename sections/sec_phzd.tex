@@ -1,0 +1,37 @@
+\section{Partial Hybrid Zero Dynamics}
+For the continuous dynamics of multi-domain hybrid systems, the goal of the control law in EQREF is to drive the dynamics of the system to the 
+\textit{zero dynamics manifold}:
+\begin{align}
+ \nonumber
+\ZeroDynamics_{\indexbyvertex{\param}} = \{(\q,\dq) \in \ConfigurationSpace :  \hspace{1mm} &\yone(\q,\dq) = 0, \\&
+\ytwo(\q) = \mathbf{0}, \ydottwo(\q,\dq) = \mathbf{0}\}
+\label{eq:ZD}
+\end{align}
+where $\yone(\q,\dq)$ and $\ytwo(\q,\dq)$ are a set of relative degree one and two outputs. The following is a Partial Zero Dynamics Surface
+\begin{align}
+\label{PZD}
+\PartialZeroDynamics_{\indexbyvertex{\param}} = \{(\q,\dq) \in \ConfigurationSpace : \ytwo(\q) = \mathbf{0}, \ydottwo(\q,\dq) = \mathbf{0}\}
+\end{align}
+This motivates the notion of a \textit{partial hybrid zero dynamics} on a cycle:
+\begin{align}
+\label{PZD}
+\indexbyedge{\resetmap} ( \indexbyedge{\guard} \cap \PartialZeroDynamics_{\param_\sore} ) \subset \PartialZeroDynamics_{\param_\tare}
+\end{align}
+
+\newsec{Motion Transitions.} It was shown in REF that we can connect any two PHZD surfaces together with the ECWF to ensure that partial hybrid zero dynamics is maintained, i.e. there is a closed form expression for parameters of the ECWF that yield a PHZD surface connecting two other PHZD surfaces. These are the conditions needed for a motion transition:
+\begin{align}
+ \left[ \begin{array} {c} \ydtwo(\timeparameterization_{\sore}(\q),\paramtransition^i) = \ydtwo(\timeparameterization_{\sore}(\q),\param_{\sore}^i) \\
+ \ydottwo(\timeparameterization_{\sore}(\q),\paramtransition^i) =\ydottwo(\timeparameterization_{\sore}(\q),\param_{\sore}^i)\end{array} \right]_{i \in \OutputSet}
+\end{align}
+and
+\begin{align}
+ \left[ \begin{array} {c} \ydtwo(\timeparameterization_{\tare}(\q),\paramtransition^i) = \ydtwo(\timeparameterization_{\tare}(\q),\param_{\tare}^i) \\
+ \ydottwo(\timeparameterization_{\tare}(\q),\paramtransition^i) =\ydottwo(\timeparameterization_{\tare}(\q),\param_{\tare}^i)\end{array} \right]_{i \in \OutputSet}
+\end{align}
+
+
+
+
+Why do we want motion transitions? What is the definition of a motion transition? --> What equations must be satisfied, does it depend on alpha and theta or just theta? What are two examples of motion transitions? I.e. transition for domain 2 and domain 3. Thanks.
+
+

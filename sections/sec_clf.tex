@@ -1,0 +1,132 @@
+\section{Control Lyapunov Functions}
+This section will show a method for drastically improving controller performance and capabilities using \emph{Control Lyapunov Function} and 
+quadratic programs that can be run in real-time. In order to better understand the underlying concepts on Control Lyapunov Functions in general as well as how they are 
+used here, we refer the reader to \cite{AGG:CDC:2012} . Given a control 
+system and set of output functions,
+\begin{align}
+\xdot &= \indexbyvertex{f}(\x) + \indexbyvertex{g} (\x) \control,\\
+\indexbyvertex{\controloutput} &=
+ \begin{bmatrix}
+  \yone(\q,\dq) \\
+  \ytwo(\q)
+ \end{bmatrix} \nonumber,
+\end{align}
+where the output functions y are as defined in the previous section, we can differentiate the relative degree one outputs once and 
+the relative two degree outputs twice to obtain,
+\begin{align}
+\label{eq:DOutputs}
+  \begin{bmatrix}
+    {\dot \yone} \\
+    {\ddot \ytwo}
+  \end{bmatrix}
+   = 
+  \underbrace{\begin{bmatrix}
+    L_{f_r}\yone(\q,\dq) \\
+    L_{f_r}L_{f_r}\ytwo(\q,\dq)
+  \end{bmatrix}}_{L_{f}}
+  +
+  \underbrace{\begin{bmatrix}
+    L_{g_r}\yone(\q,\dq) \\
+    L_{g_r}L_{f_r}\ytwo(\q,\dq)
+  \end{bmatrix}}_{\decouplingmatrix}
+  u.
+\end{align}
+Assuming A has full row rank, we choose,
+\begin{align}
+\label{eq:ControlLawSimple}
+ u = A^{-1}(-L_{f} + \nu).
+\end{align}
+This is the control law in \eqref{eq:IOControlLaw}, where we chose $\nu$ to be a polynomial, the roots of which we place; however,
+based on the form of \eqref{eq:DOutputs} and the control law \eqref{eq:ControlLawSimple}, we are able to write \eqref{eq:DOutputs} as,
+\begin{align}
+\label{eq:etalinear}
+  \dot{\eta} = 
+  \underbrace{\begin{bmatrix}
+   0 & 0 \\
+   0 & I \\
+   0 & 0 
+  \end{bmatrix}}_{F}
+\eta + 
+  \underbrace{\begin{bmatrix}
+   1 \\
+   0 \\
+   I
+  \end{bmatrix}}_{G}
+\nu,
+\end{align}
+where $\eta = (y_{1},y_{2},\dot{y}_{2})$. Using F and G, we then solve the continuous time algebraic Ricatti equations,
+\begin{align}
+\label{eq:care}
+  F^{T}P + PF - PGG^{T}P + I = 0,
+\end{align}
+which yields the symmetric, positive definite matrix P. Using P, we construct the following \emph{Control Lyapunov Function}(CLF),
+\begin{align}
+\label{eq:CLF}
+  V(\eta) = \eta^{T}P\eta.
+\end{align}
+Differentiating \eqref{eq:CLF} yields,
+\begin{align}
+\label{eq:Vdot}
+ \dot{V}(\eta) = L_{f}V(\eta) + L_{g}V(\eta)\nu,
+\end{align}
+where,
+\begin{align}
+ L_{f}(\eta) = \eta^{T}(F^{T}P + PF)\eta \\
+ L_{g}(\eta) = 2\eta^{T}PG. \nonumber
+\end{align}
+With the goal being to exponentially stabilize $\eta$, we ultimately seek a $\nu$ such that,
+\begin{align}
+  L_{f}V(\eta) + L_{g}V(\eta)\nu \leq -\gamma V(\eta)
+\end{align}
+for some $\gamma > 0$. Finding a $\nu$ that satisfies this inequality as done in \cite{AGG:CDC:2012} is very 
+usefull in that it results in dramatic torque reductions and can be done in real-time using quadratic 
+programs by solving:
+\begin{align}
+\label{eq:QP1}
+ \nu^{*} = argmin \hspace{3mm} \nu^{T} \nu \\
+ \vspace{3mm} s.t.\hspace{3mm} \psi_{0} + \psi^{T}_{1}\nu \leq 0 \nonumber
+\end{align}
+where,
+\begin{align}
+ \psi_{0} = L_{f}V(\eta) + \gamma V(\eta) \\
+ \psi_{1} = L_{g}V(\eta)^{T}. \nonumber
+\end{align}
+The resulting actuator torques are then found by,
+\begin{align}
+ u = A^{-1}(-L_{f} + \nu^{*}).
+\end{align}
+
+A more desirable formulation of the quadratic program in \eqref{eq:QP1} can be found in which the external forcing 
+is directly included if we first rewrite the constrained dynamics in \eqref{eq:ConstrainedModel},
+\begin{align}
+ M_{e}(q_{e}){\ddot{q_{e}}} + H_{e}(q_{e},\dot{q_{e}}) = 
+ \underbrace{\begin{bmatrix}
+  B & J(q_{e})
+ \end{bmatrix}}_{\overline{B}}
+ \underbrace{\begin{bmatrix}
+  u \\
+  F
+ \end{bmatrix}}_{\overline{u}},
+\end{align}
+where $J(q_{e})$ is as in \eqref{eq:holonomicCon}. This results in \eqref{eq:ControlLawSimple} being now in terms of $\overline{A}$ and $\overline{u}$,
+\begin{align}
+ \overline{A}\overline{u} = (-L_{f} + \nu).
+\end{align}
+We can then reformulate the cost to be in terms of $\overline{u}$ rather than $\nu$ by 
+noting that,
+\begin{align}
+  \nu^{T}\nu = \overline{u}^{T}\overline{A}^{T}\overline{A}\overline{u} + 2L^{T}_{f}\overline{A}\overline{u}.
+\end{align}
+It is crucial to note that in this formulation of the problem, $\overline{A}$ is never inverted. This essentially 
+solves the problems that occur during over actuation when using I/O Linearization. The quadratic program 
+is then used to solve the following optimization,
+\begin{align}
+& \overline{u}^{*} = argmin \hspace{3mm} p \delta^{2} + \overline{u}^{T}\overline{A}^{T}\overline{A}\overline{u} + 2L^{T}_{f}\overline{A}\overline{u} \\
+& \vspace{3mm}
+ s.t. \hspace{3mm} J(q_{e})\ddot{q_{e}} + \dot{J}(q_{e},\dot{q}_{e})\dot{q_{e}} = 0   \tag{Constr. Dynamics} \\
+& \hspace{8mm} \psi_{0} + \psi^{T}_{1}(\overline{A}\overline{u} + L_{f}) \leq \delta	 \tag{CLF} \\
+& \hspace{8mm} u \leq u_{max} \tag{Torque Bounds} \\
+& \hspace{8mm} F_{c} \geq 0	\tag{Forcing Constraints}
+\end{align}
+$F_{c}$ represents the set all reaction forces between the robot and the ground. The forcing 
+constraints here are used simply to ensure the robot is pushing into the ground.

@@ -1,0 +1,191 @@
+\section{Multi-Domain Human-Inspired Control}
+\label{sec:control}
+
+This section extends the framework of human-inspired control \cite{Ames11} to the multi-contact case, i.e., 
+the case where there are multiple discrete domains.  In particular, it is necessary to consider phases of under, over and full actuation.  
+This general construction, applicable to general mixed actuation gaits, will be specialized the case of AMBER 2 
+for the discrete structure given in Fig. \ref{fig:DomainGraph}.  
+
+
+
+%elaborates on the general human-inspired control approach for bipedal robotic locomotion REFERENCE followed by specific examples of controller and hybrid system construction for the AMBER2, three-domain cycle of interest.
+
+Consider the following system defined on each domain $v \in V$:
+\begin{align}
+\xdot &= \indexbyvertex{f}(\x) + \indexbyvertex{g} (\x) \control,\\
+\indexbyvertex{\controloutput} &= \indexbyvertex{\controloutput^a}(x) - \indexbyvertex{\controloutput^d}(x),
+\end{align}
+for $\x \in \indexbyvertex{\domain}$ and $\control \in \indexbyvertex{\admissiblecontrol}$ and where $\indexbyvertex{\controloutput} $ is a \textit{control output} for $\vertex \in \VertexSet$, consisting of the difference between an actual output $\indexbyvertex{\controloutput^a}(x)$ and a desired value for this output $\indexbyvertex{\controloutput^d}(x)$. The human-inspired control design process consists of proper choice of actual and desired outputs, along with construction of a control law $u(\q,\dq)$ that drives $\indexbyvertex{\controloutput^a}(x) \to \indexbyvertex{\controloutput^d}(x)$ such that the resulting hybrid system obtained by applying this control law has a periodic orbit, i.e., a walking gait. 
+
+\newsec{Human Locomotion (Actual) Outputs.}
+Motivated by the consideration of human locomotion data in previous work \cite{AVB:HSCC:11}, we will construct the actual outputs, $\indexbyvertex{\controloutput^a}$, through the use of human output combinations \cite{Ames:TAC:2012}. 
+
+\begin{mydefinition}
+A human output combination for $\vertex \in \VertexSet$ is a tuple $\indexbyhuman{\humanoutputcombo} = (\indexbyrobot{\ConfigurationSpace},\indexbyhuman{\yone},\indexbyhuman{\ytwo})$ consisting of a configuration space $\indexbyrobot{\ConfigurationSpace}$, a velocity-modulating output $\indexbyhuman{\yone} : \indexbyrobot{\ConfigurationSpace} \to \Reals$ and position-modulating outputs $\indexbyhuman{\ytwo} : \indexbyrobot{\ConfigurationSpace} \to \Reals^{\dimensionx-1}$. Let $\OutputSet_v$ be an indexing set for $\indexbyhuman{\ytwo}$ whereby $\indexbyhuman{\ytwo}(\q) = [\indexbyhuman{\ytwo}(\q)_\youtput]_{\youtput \in \OutputSet_v}$. A set of human outputs are \textit{independent} if,
+ \begin{align}
+  \text{rank}( \left[
+    \begin{array}{c} \indexbyhuman{\yone}(\q,\dq) \\
+                     \indexbyhuman{\ytwo}(\q)
+    \end{array}
+    \right]) = \indexbyvertex{\dimensionx},
+ \end{align}
+on $\indexbyrobot{\ConfigurationSpace}$, and \textit{linear} if
+\begin{align}
+ \indexbyhuman{\yone}(\q) &= \indexbyvertex{\dyonedq} \q \\
+ \indexbyhuman{\ytwo}(\q) &= \indexbyvertex{\dytwodq} \q
+\end{align}
+for $\indexbyvertex{\dyonedq} \in \Reals^{1 \times \indexbyvertex{\dimensionx}}$ and $\indexbyvertex{\dytwodq} \in \Reals^{(\indexbyvertex{\dimensionx}-1) \times \indexbyvertex{\dimensionx}}$.
+\end{mydefinition}
+
+\gap
+
+\begin{myexample}
+ We choose the following linear and independent human output combinations for the three domains of interest. For the velocity modulating output, we consider the same linear output for all three domains characterized by:
+ \begin{eqnarray}
+  \dyonedq_{v} = \left[ \begin{array}{c c c c c c c c c}
+  0 &0 &0 & -\lengthofcalf -\lengthofthigh & -\lengthofthigh& 0 & 0 & 0 & 0
+ \end{array}\right] 
+ \end{eqnarray}
+ for $v \in V = \{\ds,\fa,\ua\}$, with $\lengthofcalf$ the length of the calf and $\lengthofthigh$ the length of the thigh of the robot.   For the position modulating outputs, we first consider the linear outputs for the under-actuated domain characterized by
+  \begin{align}
+  \dytwodq_{\ua} &= \left[ \begin{array}{c c c c c c c c c}
+  0 &0 &0 & 1 & 0 & 0 & 0 & 0 & 0  \\
+  0 &0 &0 & 0 & 1 & 0 & 0 & 0 & 0  \\
+  0 &0 &0 & 0 & 0 & 0 & 0 & 1 & 0\\
+  0 &0 &0 & 0 & 0 & 1 & -1 & 0 & 0\\
+  0 &0 &1 & 1 & 1 & 1 & 0 & 0 & 0\\
+  0 &0 &1 & 1 & 1 & 1 & -1 & -1 & -1\\
+ \end{array}\right]
+ \end{align}
+ The position modulating outputs for the over- and fully-actuated domains are chosen to be submatrices of $\dytwodq_{\ua}$ based upon the available degrees of actuation in these respective domains.  In particular, $\dytwodq_{\ds} = (\dytwodq_{\ua})_{1,2,5,6}$ and  $\dytwodq_{\fa} = (\dytwodq_{\ua})_{2-6}$, where here we have used the notation $(\dytwodq_{\ua})_{i}$ to denote the $i^{\mathrm{th}}$ row of $\dytwodq_{\ua}$.
+Note that this is not the only valid choice of human output combination, but the one chosen here based upon examination of human locomotion data.
+\end{myexample}
+
+
+\newsec{Canonical Walking Functions.} Previous results \cite{ZYA2012,AVB:HSCC:11,PZA2012} reveal that for the actual outputs considered, humans tend to display very simple behavior.  This observation motivates the use of simple desired functions for bipedal locomotion. In particular, it was observed \cite{AVB:HSCC:11} through examination of human walking data that the for ``proper'' choices of the velocity modulating output---as calculated from human walking data---satisfies the property that:
+\begin{align}
+\label{eqn:y1approx}
+  \indexbyhuman{\yone}(\q) \approx \vhip t
+\end{align}
+ In addition, by selectively choosing the human outputs, they appear to be described by the solution to a linear mass-spring damper system. With this in mind, define the \textit{canonical walking function}:
+\begin{align}
+ \controloutput_{\cwf} (t, \param) = e^{-\param_4 t} (\param_1 \cos( \param_2 t) + \param_3 \sin(\param_2 t) ) + \param_5
+\end{align}
+Additionally, it was found that for more complex walking behavior, e.g., stair climbing and rough terrain locomotion \cite{PZA2012,SA:SSRR:2012}, the position modulating outputs appear to be described by the solution to a linear mass-spring-damper system under sinusoidal excitation. With this in mind, define the \textit{extended canonical walking function}:
+\begin{align}
+\nonumber
+ \controloutput_{\ecwf} (t, \param) = &e^{-\param_4 t} (\param_1 \cos( \param_2 t) + \param_3 \sin(\param_2 t) ) \\
+ &+ \param_5 \cos(\param_6 t) + \kappa(\param) \sin(\param_6 t) + \param_7,
+\end{align}
+where $\kappa(\param) = (2\param_4\param_5\param_6)/((\param_2)^2+(\param_4)^2+(\param_6)^2)$. As found in \cite{Ames11} these functions represent (human) bipedal locomotion data with high correlation and therefore, we leverage these functions in construction of desired control outputs for bipedal locomotion and claim that the functions are natural suggestions for bipedal (human and robotic) walking.
+
+\newsec{Parameterization of Time.} 
+With these time-based functions in mind, and specifically \eqref{eqn:y1approx}, coupled with the desire to construct \textit{autonomous} control functions, that is, functions which are independent of time, we specify the following \textit{parameterization of time}:
+\begin{align}
+ \indexbyvertex{\timeparameterization}(\q) = \frac{\indexbyhuman{\yone}(\q)-\pzero}{\vhip}
+\end{align}
+where $\pzero \in \Reals$ is used to align $\indexbyvertex{\timeparameterization}(\q)=0$ at critical points in the gait, i.e. at the start of specific domains $\vertex \in \VertexSet$.  
+
+%, for which we make the substitution $t \to \indexbyvertex{\timeparameterization}(\q)$ in EQREF and EQREF. We seek an autonomous control law, through this parameterization, for increased robustness.
+
+\newsec{Desired Output functions.} Based upon the human outputs and their time-based representation given by the canonical walking functions, we define outputs for the robot based upon our desire for the robot to have the same output behavior as a human. With the goal of controlling the forward velocity of the robot, we define the relative degree one desired output to be:
+\begin{align}
+ \ydone = \vhip, \qquad v \in V
+\end{align}
+for all domains, i.e., irrespective of actuation type.  Similarly, with the goal of the robot tracking the canonical walking function, for the over actuated domains, we define the desired outputs to be:
+\begin{align}
+ \ydtwo(\indexbyvertex{\timeparameterization}(\q),\indexbyvertex{\param}) = [y_{cwf}(\indexbyvertex{\timeparameterization}(\q),\indexbyvertex{\param}^i)]_{i \in \OutputSet_v}, \:\: v \in V_{oa}
+\end{align}
+that is, for $v \in  V \:\: \mathrm{s.t} \:\: m_r > n - c_v$.  Finally, in the case of either fully or under actuation, we define the desired output to be:
+\begin{align}
+ \ydtwo(\indexbyvertex{\timeparameterization}(\q),\indexbyvertex{\param}) = [y_{ecwf}(\indexbyvertex{\timeparameterization}(\q),\indexbyvertex{\param}^i)]_{i \in \OutputSet_v}, \:\: v \in V_{fa} \cup V_{ua}
+\end{align}
+that is, for $v \in V \:\: \mathrm{s.t} \:\: m_r \leq n - c_v$. 
+%
+%
+%we consider the following relative degree two outputs for $v = ds$, i.e. in the double support domain:
+%\begin{align}
+% \ydtwo(\indexbyvertex{\timeparameterization}(\q),\indexbyvertex{\param}) = [y_{cwf}(\indexbyvertex{\timeparameterization}(\q),\indexbyvertex{\param}^i)]_{i \in \OutputSet}.
+%\end{align}
+%Similarly, with the goal of the robot tracking the canonical walking function, we consider the following relative degree two outputs for $v = fa$ and $v=ua$, i.e. in the fullyactuated and underactuated domains:
+%\begin{align}
+% \ydtwo(\indexbyvertex{\timeparameterization}(\q),\indexbyvertex{\param}) = [y_{ecwf}(\indexbyvertex{\timeparameterization}(\q),\indexbyvertex{\param}^i)]_{i \in \OutputSet}.
+%\end{align}
+
+\newsec{Control Law Construction.} The goal is to drive the outputs of the robot, obtained through a human output combination, to the outputs of the human as represented by the canonical walking functions parameterized by $\indexbyvertex{\timeparameterization}(\q)$. This motivates the final form of the outputs, termed the \textit{human-inspired outputs} and given by, for all $v \in V$:
+\begin{align}
+ \yone(\q,\dq) &= \frac{\partial y^H_{1,v} (q)}{\partial \q} \dq -\vhip\\
+ \ytwo(\q) &= y^H_{2,v}(\q) - \ydtwo(\indexbyvertex{\timeparameterization}(\q), \indexbyvertex{\param})
+\end{align}
+
+%Since the type of actuation of the robot is determined by the interplay between the generalized coordinates and the constraints enforced on a given domain, we can define a controller for all $v \in V$ for which only the output vectors that define this controller change.  That is, we can define the \textit{multi-domain human-inspired controller} by:
+
+From these outputs, we can construct two types of controllers: one for the fully and over actuated domains, and one for the under actuated domain.  In the case of full and over actuation, we define the {\it human-inspired controller} by:
+\begin{align}
+\label{eqn:uv}
+ \indexbyvertex{\control^{(\param_{v},\controlgain)}}(\q,\dq)& = -\indexbyvertex{\decouplingmatrix}^{-1}(\q,\dq)  \left( \left[ \begin{array}{c} 0 \\ L_{f_v}L_{f_v}\ytwo(\q, \dq) \end{array} \right]\right.  \\ &+ \left.\left[ \begin{array}{c} L_{f_v}\yone(\q, \dq) \\ 2 \controlgain L_{f_v}\ytwo(\q, \dq) \end{array} \right] + \left[ \begin{array}{c} \controlgain \yone(\q,\dq) \\ \controlgain^2 \ytwo(\q) \end{array} \right] \right),
+ \nonumber
+\end{align}
+for $v \in V_{fa} \cap V_{oa}$.  Here $L$ is the Lie derivative, $\controlgain > 0$ is a user defined control gain that dictates the convergence of $\yone$ and $\ytwo$ to 0, and
+\begin{align}
+ \indexbyvertex{\decouplingmatrix}(\q,\dq) = \left[ \begin{array}{c} L_{g_v}\yone(\q, \dq) \\ L_{g_v}L_{f_v}\ytwo(\q, \dq) \end{array} \right].
+\end{align}
+is the decoupling matrix.  In a similar fashion, in the case of underactuation, we define the human-inspired controller:  
+\begin{align}
+\label{eqn:uvunder}
+ \indexbyvertex{\control^{(\param_{v},\controlgain)}}(\q,\dq) = -&\indexbyvertex{\decouplingmatrix}^{-1}(\q,\dq) \left( L_{f_v}L_{f_v}\ytwo(\q,\dq) + \right. \\
+ & \left. 2 \controlgain L_{f_v}\ytwo(\q,\dq) + \controlgain^2 \ytwo(\q)\right) \nonumber
+\end{align}
+for $v \in \Vua$, where in this case $\decouplingmatrix =  L_{g_v}L_{f_v}\ytwo(\q, \dq)$.  We note that $\decouplingmatrix$ is assumed to non-singular for all $v \in V$ as a necessary condition for the human output combination $Y^H_v$ to be valid; this also implies that $\yone$ and $\ytwo$ have the proper (vector) relative degree.   Importantly, depending on the choice of outputs and constraints enforced, the control law \eqref{eqn:uv} is a controller for the case of under, full and over actuation.
+
+
+Applying the feedback control law in \eqref{eqn:uv} and \eqref{eqn:uvunder} to \eqref{eqn:fgdyn} yields dynamical systems for each domain.   It is the behavior of this closed form system that we wish to analyze.  In particular, the goal is to find parameters $\param_{v}$ for each domain such that a hybrid periodic orbit is generated for the closed form system.  This is the aim of the human-inspired optimization problem that will be presented in the next section.
+
+%This, in turn, yields a hybrid control system he hybrid control system modeling the bipedal robot being considered, yields a hybrid system.
+%
+%
+%The feedback linearization controller for doublesupport, denoted by $\indexbydoublesupport{\control^{(\param_{ds},\controlgain)}}(\q,\dq)$ and termed the \textit{human-inspired controller} for double support due to its dependence on the human-inspired outputs, can now be stated as:
+%\begin{align}
+% \indexbydoublesupport{\control^{(\param_{ds},\controlgain)}}(\q,\dq)& = -\indexbydoublesupport{\decouplingmatrix}^{-1}(\q,\dq)  \left( \left[ \begin{array}{c} 0 \\ L_{f_r}L_{f_r}\ytwods(\q, \dq) \end{array} \right]\right.  \\ &+ \left.\left[ \begin{array}{c} L_{f_r}\yoneds(\q, \dq) \\ 2 \controlgain L_{f_r}\ytwods(\q, \dq) \end{array} \right] + \left[ \begin{array}{c} \controlgain \yoneds(\q,\dq) \\ \controlgain^2 \ytwods(\q) \end{array} \right] \right),
+% \nonumber
+%\end{align}
+%with control gain $\controlgain$ and decoupling matrix
+%\begin{align}
+% \indexbydoublesupport{\decouplingmatrix}(\q,\dq) = \left[ \begin{array}{c} L_{g_r}\yoneds(\q, \dq) \\ L_{g_r}L_{f_r}\ytwods(\q, \dq) \end{array} \right].
+%\end{align}
+%Note that the decoupling matrix is non-singular by the definition of an admissible output combination see DEFINITION. More generally, this follows from the fact that care was taken when defining human output combinations so that the are independent see DEFINITION.
+%
+%Applying the feedback control law in EQREF to the hybrid control system modeling the bipedal robot being considered, yields a hybrid system.
+%
+%The feedback linearization controller for full actuation, denoted by $\indexbyfullactuation{\control^{(\indexbyvertex{\param},\controlgain)}}(\q,\dq)$ and termed the \textit{human-inspired controller} for full actuation due to its dependence on the human-inspired outputs, can now be stated as:
+%\begin{align}
+%\nonumber
+% \indexbyfullactuation{\control^{(\param_{fa},\controlgain)}}(\q,\dq)& = -\indexbyfullactuation{\decouplingmatrix}^{-1}(\q,\dq)  \left( \left[ \begin{array}{c} 0 \\ L_{f_r}L_{f_r}\ytwofa(\q,\dq) \end{array} \right]\right.  \\ &+ \left.\left[ \begin{array}{c} L_{f_r}\yonefa(\q, \dq) \\ 2 \controlgain L_{f_r}\ytwofa(\q) \end{array} \right] + \left[ \begin{array}{c} \controlgain \yonefa(\q,\dq) \\ \controlgain^2 \ytwofa(\q) \end{array} \right] \right),
+% \nonumber
+%\end{align}
+%with control gain $\controlgain$ and decoupling matrix
+%\begin{align}
+% \indexbyfullactuation{\decouplingmatrix}(\q,\dq) = \left[ \begin{array}{c} L_{g_r}\yonefa(\q, \dq) \\ L_{g_r}L_{f_r}\ytwofa(\q, \dq) \end{array} \right].
+%\end{align}
+%Note that the decoupling matrix is non-singular by the definition of an admissible output combination see DEFINITION. More generally, this follows from the fact that care was taken when defining human output combinations so that the are independent see DEFINITION.
+%
+%Applying the feedback control law in EQREF to the hybrid control system modeling the bipedal robot being considered, yields a hybrid system.
+%
+%\newsec{Underactuated Control.} When the robot is underactuated, there is no longer the control authority to drive all of the outputs of the system to be in agreement with the human outputs. In particular, since we will no longer have control of the stance ankle (as in the case of AMBER, due to its point feet), we can no longer directly control the forward movement of the hip through the output HUH. Thus, in the case of underactuation, we only consider the relative degree 2 outputs given in EQREF.
+%
+%Motivated by these considerations related to underactuated control, for the affine control system FGU associated with the robotic model EQREF, we define the \textit{human-inspired controller} for underactuation:
+%\begin{align}
+% \indexbyunderactuation{\control^{(\param_{ua},\controlgain)}}(\q,\dq) = -&\indexbyunderactuation{\decouplingmatrix}^{-1}(\q,\dq) \left( L_{f_r}L_{f_r}\ytwoua(\q,\dq) + \right. \\
+% & \left. 2 \controlgain L_{f_r}\ytwoua(\q,\dq) + \controlgain^2 \ytwoua(\q)\right)
+%\end{align}
+%with y2 as defined in EQREF and the underactuated decoupling matrix. As in the case of full actuation, the decoupling matrix is non-singular because of the choice of output functions and the fact that we assume admissibility of the outputs. In addition, the control law $\indexbyunderactuation{\control^{(\indexbyvertex{\param},\controlgain)}}(\q,\dq)$ results in dynamics on the outputs given by EQREF and therefore renders the relative degree two outputs, y2, exponentially stable. Due to the fact that the system is underactuated, the output y1 will no longer converge to 0. Thus the velocity of the hip cannot be directly controlled in the case of underactuation.
+%
+%Applying the feedback control law in EQREF to the hybrid control system modelin the bipedal robot being considered, yields a hybrid system.
+
+
+
+
+
+
+
+

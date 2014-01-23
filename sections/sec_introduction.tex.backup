@@ -1,0 +1,26 @@
+\section{INTRODUCTION}
+
+Human walking consists of multiple phases, referred to in this paper as domains, including instances of single support and double support that together result in efficient, fluid walking gaits. Between these domains are transition events such as heel strike, toe strike, toe off, and heel off that allow humans to elegantly regulate gait characteristics such as walking speed, step length, step frequency, and many others. With the goal of designing robust, efficient robotic walking, it is essential that control theorists strive to develop walking controllers capable of taking advantage of these same gait characteristics. Unfortunately, the overwhelming majority of robotic walking revolves around the assumption that the feet are flat and remain flat throughout the gait. Designing controllers with the goal of walking with flat feet greatly reduces the ability to walk efficiently. 
+
+\begin{figure}[t!]
+\centering
+\includegraphics[width=0.45\textwidth]{figures/DomainGraph.pdf}
+\caption{The directed graph associated with 3 domain walking. In this case, the red leg is the ``stance'' leg and the black leg is the ``non-stance'' leg.}
+\label{fig:DomainGraph}
+\end{figure}
+
+Though flat footed walking is less efficient, countless methods have been developed and realized on robots that are           work well and are surprisingly robost. One of the most widely used approacheds is to design walking controllers around the zero moment point(ZMP)  \cite{KKKFHYH06,VB05}. The ZMP approach has been successfull in producing surprisingly robust locomotion on a number of humanoid platforms including Honda's Assimo \cite{LG10}, the entire series of HRP humanoids from Kawada Industries(see HRP-2 in \cite{TIOMA09}), as well as countless other humanoid robots(see \cite{KNKKII02} for another example). Zero-moment point control is based upon precisely planned gaits centered around balancing the forces and moments at the feet in order to keep the feet flat. 
+
+Another control strategy similar to ZMP based control is capture point control \cite{KBRGP12,PCD06}. Capture point control is based
+upon the assumption that there is a region on the stepping surface in which, if the swing foot is placed,
+the robot can successfully stop. Capture point methods have certain inherent characteristics which make them atrractive, that is the ability to directly calculate whether or not it is feasible for the robot to slow down and stop, or if the robot must prepare for a fall.  As with ZMP based control, capture point has been successfully
+realized experimentally on the humanoid M2V2 \cite{PKBRCCJN12}. ZMP and capture
+point control are part of a large family of quasi-static approaches to bipedal locomotion.
+Other more mathematically formal methods that have been developed more recently include geometric
+reduction \cite{GCAS10,SA:CDC09-2}, control symmetries \cite{SB05}, and hybrid zero
+dynamics \cite{Ames:NAO:2012,Ames11,GCAS10}. Hybrid zero dynamics based control has seen great success on multiple platforms such as RABBIT \cite{CAAPWCG03}, MABEL \cite{SPPG10}, ATRIAS \cite{url:AtriasWalk}, and Amber 1 \cite{YPA12},
+the  point footed predecessor to the robot discussed in this thesis. Extraordinarily, MABEL has also achieved
+human-like running using control based on hybrid zero dynamics \cite{SPPG10}. RABBIT, MABEL, and
+Amber 1 are all 2-D planar bipeds with point feet; therefore, they are only able to take the notion of being human-like
+so far. 
+\indent{}In this paper, a human-inspired optimization will be presented that yields controller parameters defining referrence trajectories for a 3 domain walking gait consisting of all key phases of humanlike walking: over actuation, full actuation, and under actuation. The robot model used is that of Amber 2, the footed successor to Amber 1 discussed in the previous paragraph.

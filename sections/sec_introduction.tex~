@@ -1,0 +1,23 @@
+\section{INTRODUCTION}
+\raggedbottom
+
+Human walking consists of multiple phases, referred to in this paper as domains, including instances of single support and double support that together result in efficient, fluid locomotion. Between these domains are transition events such as heel strike, toe strike, toe off, and heel off that allow humans to elegantly regulate gait characteristics such as walking speed, step length, and step frequency. With the goal of designing robust, efficient robotic walking, it is essential that control theorists strive to develop walking controllers capable of taking advantage of these same gait characteristics. Unfortunately, the overwhelming majority of robotic walking to date revolves around the assumption that the feet are flat and remain flat throughout the gait, which greatly reduces the ability to walk efficiently.
+\begin{figure}[t!]
+\centering
+\includegraphics[width=0.45\textwidth]{figures/AMBER2ROBOTS.pdf}
+\caption{Bipedal robotic testbed AMBER 2 seen on the left in a SolidWorks render and on the right 
+as the robot is today.}
+\label{fig:robots}
+\end{figure}
+
+Though flat footed walking is less efficient, countless methods have been developed and realized on robots that have worked well and have been demonstrated to be surprisingly robust. One of the most widely used approaches is to design walking controllers around the zero moment point(ZMP)  \cite{KKKFHYH06,VB05}. The ZMP approach has been successfull in producing surprisingly robust locomotion on a number of humanoid platforms including Honda's Assimo \cite{LG10}, the entire series of HRP humanoids from Kawada Industries (see HRP-2 in \cite{TIOMA09}), as well as countless other humanoid robots (see \cite{KNKKII02} for another example).
+
+Another control strategy similar to ZMP based control is capture point control \cite{KBRGP12,PCD06}. Capture point control is based
+upon finding regions on the stepping surface in which the robots state is capturable, meaning the robot can successfully stop. Capture point has been successfully
+realized experimentally on the humanoid M2V2 \cite{PKBRCCJN12} with both walking and push recovery.
+Other more mathematically formal methods that have been developed more recently include geometric
+reduction \cite{GCAS10,SA:CDC09-2}, control symmetries \cite{SB05}, and hybrid zero
+dynamics \cite{Ames:NAO:2012,Ames11,GCAS10}. Hybrid zero dynamics based control has seen great success on multiple platforms such as RABBIT \cite{CAAPWCG03}, MABEL \cite{SPPG10}, ATRIAS \cite{url:AtriasWalk}, AMBER 1 \cite{YPA12}, and AMBER 2 \cite{url:AMBER2_Walk}. Extraordinarily, MABEL has also achieved
+human-like running using hybrid zero dynamics based control \cite{SPPG10}. 
+
+In this paper, a human-inspired optimization will be presented that yields controller parameters defining referrence trajectories for a 3 domain walking gait consisting of all the key phases of humanlike walking: over actuation, full actuation, and under actuation. The robot model used is that of AMBER 2 pictured in Figure \ref{fig:robots}, the footed successor to AMBER 1. The remainder of this paper will be structured as follows: Section \ref{sec:hybridsystems} will define the multi-domain hybrid system model as well as discuss the differing contact conditions and actuation types, Section \ref{sec:control} will introduce human inspired control, followed by the formulation of a multi-domain, human-inspired optimization in Section \ref{sec:optimization}. In Section \ref{sec:QP}, a control method using a quadratic program(QP) is presented followed by Section \ref{sec:simresults} in which simulation results are presented.

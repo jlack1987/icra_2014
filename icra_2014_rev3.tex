@@ -1,0 +1,76 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out
+                                                          % if you need a4paper
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+                                                          % paper
+
+\IEEEoverridecommandlockouts                              % This command is only
+                                                          % needed if you want to
+                                                          % use the \thanks command
+\overrideIEEEmargins
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+\usepackage{graphicx,float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{subfig}
+\usepackage{mathrsfs}
+\usepackage{amsmath,amssymb}
+\usepackage{mathtools}
+\usepackage{icra_2014_initial}
+\usepackage{url}
+\usepackage{comment}
+
+
+\newtheorem{mydefinition}{\bfseries Definition}%[section]
+\newtheorem{mynote}{\bfseries Note}%[section]
+\newtheorem{myproposition}{\bfseries Proposition}%[section]
+\newtheorem{myexample}{\bfseries Example}%[section]
+\newtheorem{myassumption}{\bfseries Assumption}%[section]
+\newtheorem{mytheorem}{\bfseries Theorem}
+\newtheorem{mymaintheorem}{\bfseries Main Theorem}
+\newtheorem{mycorollary}{\bfseries Corollary}%[section]
+\newtheorem{mylemma}{\bfseries Lemma}%[section]
+\newtheorem{myproperty}{\bfseries Property}
+\newtheorem{myremark}{\bfseries Remark}
+\newtheorem{mynotation}{\bfseries Notation}
+
+\title{\LARGE \bf
+Planar Multi-Contact Bipedal Walking Using Hybrid Zero Dynamics and Quadratic Programs
+}
+\author{\authorone, \authortwo, and \authorthree% <-this % stops a space
+  \thanks{\authorone, \text{\authortwo} and \text{\authorthree} are with the Department of Mechanical Engineering, Texas A\&M University, College Station, TX 77843, e-mail:
+    {\tt\small \{jordanlack,mjpowell,aames\}@tamu.edu}}%
+    \thanks{This research is supported by NASA grant NNX11AN06H, NSF grants CNS-0953823 and CNS-1136104, and NHARP award 00512-0184-2009.}% <-this % stops a space
+}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\begin{abstract}
+This paper presents a method for achieving planar multi-phase, multi-contact robotic walking using a human inspired
+control and optimization. The walking presented contains phases with differing degrees of actuation including
+over actuated double support, fully actuated single support, and under actuated single support via
+heel lift. An optimization methodology for generating walking gaits will be presented utilizing partial hybrid zero dynamics.  It will be shown that this method yields periodic, multi-contact locomotion. In addition, a control law utilizing online optimization via 
+a quadratic program will be presented, resulting in improved controller 
+capabilities and performance. Simulation results for both standard Input-Output Linearization as well as the quadratic program will be presented.
+\end{abstract}
+
+\input{sections/sec_introduction}
+\input{sections/sec_hybridsystems_ames}
+\input{sections/sec_control_ames}
+\input{sections/sec_optimization}
+\input{sections/QuadraticProgram}
+\input{sections/sec_simresults}
+\input{sections/sec_conclusion}
+\bibliographystyle{abbrv}
+\bibliography{bibdata}
+
+\end{document}

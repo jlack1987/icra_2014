@@ -1,0 +1,36 @@
+\section{\uppercase{Quadratic Programs}}
+\label{sec:QP}
+
+The chief obstacle in designing controllers for multi-domain, multi-contact locomotion lies in the constantly changing degree of actuation. Over actuated domains provide a unique issue from a controls perspective, namely that there are not a unique set of actuator torques to meet a control objective. In the case of I/O Linearization, this results in singularities in the decoupling matrix. This section presents an online QP to select optimal actuator torques to achieve convergence.
+
+Since torque saturation is a common issue in bipedal robots, the desire is to pose a QP that will meet the control objective while being optimal with respect to the amount of actuator torque requested. First recall that for $v \in \{V_{oa},V_{fa}\}$,  the control law for these domains is given in Equation \eqref{eqn:uv}. This can be rewritten in the following form,
+\begin{align}
+\hspace{-3mm}-\indexbyvertex{\decouplingmatrix}(\q,\dq)\indexbyvertex{\control^{(\param_{v},\controlgain)}}(\q,\dq)& = \left( \left[ \begin{array}{c} 0 \\ L_{f_v}L_{f_v}\ytwo(\q, \dq) \end{array} \right]\right. \tag{QPC1} \\ 
+& \hspace{-20mm}+ \left.\left[ \begin{array}{c} L_{f_v}\yone(\q, \dq) \\ 2 \controlgain L_{f_v}\ytwo(\q, \dq) \end{array} \right] + \left[ \begin{array}{c} \controlgain \yone(\q,\dq) \\ \controlgain^2 \ytwo(\q) \end{array} \right] \right) \nonumber
+\end{align}
+in which it can be posed as a constraint to a QP, resulting in the following control law:
+\begin{align}
+  u^{*}_{v} = \underset{u_{v} \in \mathbb{R}^{9}}{\mathrm{argmin}} \hspace{3mm} u^{T}_{v}W_{v} u_{v} \hspace{0mm} \\
+ s.t. \hspace{5mm} \mathrm{(QPC1)} \hspace{-10mm} \nonumber
+\end{align}
+where $W_{v}$ is a $9 \times 9$ torque distribution matrix that can be used to distribute the torques to allow certain actuators to do more of the work than others if necessary based on actuator capabilities. For the robot model being used here, the torque distribution matrix takes the form,
+\begin{align}
+\label{eq:torquedist}
+ W_{v} = 
+ \begin{bmatrix}
+  \mathbf{0}_{3 \times 3} & \mathbf{0}_{3 \times 6} \\
+  \mathbf{0}_{6 \times 3} & (\omega_{v})_{m_{r} \times m_{r}}
+ \end{bmatrix}
+\end{align}
+where $m_{r}$ the number of actuators on the robot, and $\omega_{v}$ is a $m_{r} \times m_{r}$ diagonal matrix describing in which the elements on the diagonal reflect the desired torque distribution. If, for example, each actuator is to be weighted equally, $\omega_{v}$ is the identity matrix. Similarly, the same can be done for $v \in V_{ua}$ where the original control law is rewritten as,
+\begin{align}
+-\indexbyvertex{\decouplingmatrix}(\q,\dq) \indexbyvertex{\control^{(\param_{v},\controlgain)}}(\q,\dq) = & \left( L_{f_v}L_{f_v}\ytwo(\q,\dq) + \right. \tag{QPC2} \\
+ & \hspace{-10mm} \left. 2 \controlgain L_{f_v}\ytwo(\q,\dq) + \controlgain^2 \ytwo(\q)\right) \nonumber
+\end{align}
+With this, the resulting control law for $v \in V_{ua}$ becomes,
+\begin{align}
+ u^{*}_{ua} = \underset{u_{ua} \in \mathbb{R}^{9}}{\mathrm{argmin}} \hspace{3mm} u^{T}_{ua}W_{ua} u_{ua} \hspace{0mm} \\
+  s.t. \hspace{5mm} \mathrm{(QPC2)} \hspace{-10mm} \nonumber
+\end{align}
+These QP's not only allow for the distribution of torque, they also do not require the inversion of the decoupling matrix, meaning that during over actuation the QP can minimize torque while meeting the convergence objectives.
+
